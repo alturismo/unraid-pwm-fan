@@ -28,8 +28,8 @@ if (( "$current_temp" < "$target_temp" )); then
 	echo $pwm_set > /sys/devices/platform/"$pwm_controller"/hwmon/$pwm_hwmon/$pwm_fan
 	if [[ -f "$fan_on" ]]; then
 		rm "$fan_on"
+		echo "set fan off"
 	fi
-	echo "set fan off"
 fi
 
 if [[ -f "$fan_on" ]] && (( "$current_temp" >= "$target_temp" )) && (("$current_temp" < "$start_temp" )); then

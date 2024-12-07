@@ -102,7 +102,7 @@ max rpm:
     </blockquote>
 
 cron timer:
-: <input type="text" name="hdd_cron_time" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_cron_time;?>" placeholder="3 * * * *" >
+: <input type="text" name="hdd_cron_time" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_cron_time;?>" placeholder="*/3 * * * *" >
     <blockquote class='inline_help'>
         <p>set the lookup cron value here, * * * * * as sample for every minute</p>
     </blockquote>
@@ -166,7 +166,7 @@ max rpm:
     </blockquote>
 
 cron timer:
-: <input type="text" name="cron_time" class="narrow" maxlength="20" value="<?=$pwmfansetup_cron_time;?>" placeholder="2 * * * *" >
+: <input type="text" name="cron_time" class="narrow" maxlength="20" value="<?=$pwmfansetup_cron_time;?>" placeholder="*/2 * * * *" >
     <blockquote class='inline_help'>
         <p>set the lookup cron value here, * * * * * as sample for every minute</p>
     </blockquote>

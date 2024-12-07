@@ -44,8 +44,8 @@ if (( "$current_temp" < "$hdd_target_temp" )); then
 	echo $pwm_set > /sys/devices/platform/$hdd_pwm_controller/hwmon/$hdd_pwm_hwmon/$hdd_pwm_fans
 	if [[ -f "$fan_on" ]]; then
 		rm "$fan_on"
+		echo "set fan off"
 	fi
-	echo "set fan off"
 fi
 
 if [[ -f "$fan_on" ]] && (( "$current_temp" >= "$hdd_target_temp" )) && (("$current_temp" < "$hdd_start_temp" )); then
