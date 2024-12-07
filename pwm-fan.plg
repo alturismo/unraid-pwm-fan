@@ -1,0 +1,107 @@
+<?xml version='1.0' standalone='yes'?>
+<!DOCTYPE PLUGIN [
+<!ENTITY name      "pwm-fan">
+<!ENTITY author    "alturismo">
+<!ENTITY version   "2024.12.05">
+<!ENTITY launch    "Settings/pwm-fan">
+<!ENTITY gitURL    "https://raw.githubusercontent.com/alturismo/unraid-pwm-fan/master">
+<!ENTITY pluginURL "&gitURL;/&name;.plg">
+<!ENTITY plgPATH   "/boot/config/plugins/&name;">
+<!ENTITY plgNAME   "&name;-&version;-x86_64">
+<!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
+<!ENTITY packages  "/boot/config/plugins/&name;/packages">
+]>
+<PLUGIN name="&name;" 
+        author="&author;" 
+        version="&version;" 
+        launch="&launch;" 
+        pluginURL="&pluginURL;" 
+        min="6.11.0"
+        support="https://forums.unraid.net/topic/81786-support-alturismo-repos/">
+ 
+<CHANGES>
+ ###2024.12.03
+  - Initial Release.
+
+</CHANGES>
+
+<FILE Name="&emhttp;/README.md">
+ <INLINE>
+  **PWM Fan**
+
+  Plugin to control pwm fan/s by CPU or HDD Temps
+ </INLINE>
+</FILE>
+
+<FILE Name="&plgPATH;/&plgNAME;.txz" Run="upgradepkg --install-new">
+<URL>&gitURL;/packages/&name;.txz</URL>
+</FILE>
+
+<FILE Run="/bin/bash">
+ <INLINE>
+
+  echo "Checking executable flags..."
+
+if [ -f /usr/local/emhttp/plugins/pwm-fan/scripts/none ]; then
+    if [ ! -x /usr/local/emhttp/plugins/pwm-fan/scripts/none ]; then
+        chmod +x /usr/local/emhttp/plugins/pwm-fan/scripts/*
+        echo "scripts are executable."
+    else
+        echo "scripts where already executable."
+    fi
+else
+    echo "script doesn't exist."
+fi
+
+ </INLINE>
+</FILE>
+
+<FILE Run="/bin/bash">
+ <INLINE>
+
+  echo "Starting Actions and pwm if crons where set ..."
+
+  /usr/local/emhttp/plugins/pwm-fan/scripts/fans.sh
+
+  touch /boot/config/plugins/pwm-fan/pwmfansettings
+  sed -i 's/^cron_state=.*//' /boot/config/plugins/pwm-fan/pwmfansettings
+  sed -i 's/^hdd_cron_state=.*//' /boot/config/plugins/pwm-fan/pwmfansettings
+  sed -i '/^$/d' /boot/config/plugins/pwm-fan/pwmfansettings
+
+  echo 'cron_state=""' >> /boot/config/plugins/pwm-fan/pwmfansettings
+  echo 'hdd_cron_state=""' >> /boot/config/plugins/pwm-fan/pwmfansettings
+
+  /usr/local/emhttp/plugins/pwm-fan/scripts/cpu_cron.sh
+  /usr/local/emhttp/plugins/pwm-fan/scripts/hdd_cron.sh
+
+  if [ ! -z "$(crontab -l | grep -i pwm_hdd.sh)" ]; then
+    echo "cronjob for HDD pwm started"
+	sed -i 's/^hdd_cron_state=.*/hdd_cron_state="started"/' /boot/config/plugins/pwm-fan/pwmfansettings
+  else
+    echo "cron for HDD not started"
+	sed -i 's/^hdd_cron_state=.*/hdd_cron_state="stopped"/' /boot/config/plugins/pwm-fan/pwmfansettings
+
+  fi
+
+  if [ ! -z "$(crontab -l | grep -i pwm-fan.sh)" ]; then
+    echo "cronjob for CPU pwm started"
+	sed -i 's/^cron_state=.*/cron_state="started"/' /boot/config/plugins/pwm-fan/pwmfansettings
+  else
+    echo "cron for CPU not started"
+	sed -i 's/^cron_state=.*/cron_state="stopped"/' /boot/config/plugins/pwm-fan/pwmfansettings
+  fi
+
+ </INLINE>
+</FILE>
+
+<FILE Run="/bin/bash" Method="remove">
+ <INLINE>
+  echo "Removing &name;..."
+  removepkg &plgPATH;/*.txz
+  rm -rf &plgPATH;
+  rm -rf &emhttp;
+  echo "&name; has been removed"
+ </INLINE>
+</FILE>
+
+</PLUGIN>

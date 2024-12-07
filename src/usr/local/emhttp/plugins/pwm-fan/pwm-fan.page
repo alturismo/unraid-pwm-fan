@@ -1,0 +1,181 @@
+Menu="Utilities"
+Type="xmenu"
+Title="PWM-FANS"
+Icon="icon-fan"
+Tabs="true"
+---
+<?php
+// HDD Settings
+$pwmfansetup            = parse_ini_file("/boot/config/plugins/pwm-fan/pwmfansettings",true);
+$pwmfansetup_hdd_pwm_fan        = isset($pwmfansetup['hdd_pwm_fan']) ? $pwmfansetup['hdd_pwm_fan'] : "";
+$pwmfansetup_hdd_pwm_hdd        = isset($pwmfansetup['hdd_pwm_hdd']) ? $pwmfansetup['hdd_pwm_hdd'] : "";
+$pwmfansetup_hdd_pwm_controller        = isset($pwmfansetup['hdd_pwm_controller']) ? $pwmfansetup['hdd_pwm_controller'] : "";
+$pwmfansetup_hdd_pwm_hwmon        = isset($pwmfansetup['hdd_pwm_hwmon']) ? $pwmfansetup['hdd_pwm_hwmon'] : "";
+$pwmfansetup_hdd_start_temp        = isset($pwmfansetup['hdd_start_temp']) ? $pwmfansetup['hdd_start_temp'] : "";
+$pwmfansetup_hdd_max_temp        = isset($pwmfansetup['hdd_max_temp']) ? $pwmfansetup['hdd_max_temp'] : "";
+$pwmfansetup_hdd_target_temp        = isset($pwmfansetup['hdd_target_temp']) ? $pwmfansetup['hdd_target_temp'] : "";
+$pwmfansetup_hdd_min_rpm        = isset($pwmfansetup['hdd_min_rpm']) ? $pwmfansetup['hdd_min_rpm'] : "";
+$pwmfansetup_hdd_max_rpm        = isset($pwmfansetup['hdd_max_rpm']) ? $pwmfansetup['hdd_max_rpm'] : "";
+$pwmfansetup_hdd_cron_time        = isset($pwmfansetup['hdd_cron_time']) ? $pwmfansetup['hdd_cron_time'] : "";
+// CPU Settings
+$pwmfansetup_pwm_fan        = isset($pwmfansetup['pwm_fan']) ? $pwmfansetup['pwm_fan'] : "";
+$pwmfansetup_pwm_controller        = isset($pwmfansetup['pwm_controller']) ? $pwmfansetup['pwm_controller'] : "";
+$pwmfansetup_pwm_hwmon        = isset($pwmfansetup['pwm_hwmon']) ? $pwmfansetup['pwm_hwmon'] : "";
+$pwmfansetup_start_temp        = isset($pwmfansetup['start_temp']) ? $pwmfansetup['start_temp'] : "";
+$pwmfansetup_max_temp        = isset($pwmfansetup['max_temp']) ? $pwmfansetup['max_temp'] : "";
+$pwmfansetup_target_temp        = isset($pwmfansetup['target_temp']) ? $pwmfansetup['target_temp'] : "";
+$pwmfansetup_min_rpm        = isset($pwmfansetup['min_rpm']) ? $pwmfansetup['min_rpm'] : "";
+$pwmfansetup_max_rpm        = isset($pwmfansetup['max_rpm']) ? $pwmfansetup['max_rpm'] : "";
+$pwmfansetup_cron_time        = isset($pwmfansetup['cron_time']) ? $pwmfansetup['cron_time'] : "";
+?>
+
+<script>
+    function send(command) {
+        if(command == "hdd_start"){
+            document.getElementById("command").value = "/usr/local/emhttp/plugins/pwm-fan/scripts/hdd_cron.sh";
+        } else if( command == "cpu_start" ){
+            document.getElementById("command").value = "/usr/local/emhttp/plugins/pwm-fan/scripts/cpu_cron.sh";
+        }
+        document.getElementById("form").submit();
+    }
+</script>
+
+<form markdown="1" id="form" method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" id="file" name="#file" value="/boot/config/plugins/pwm-fan/pwmfansettings" />
+<input type="hidden" id="command" name="#command" value="" />
+
+
+<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>HDD FAN Setup</span></div>
+
+pwm fan:
+: <input type="text" name="hdd_pwm_fan" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_pwm_fan;?>" placeholder="pwm3" >
+    <blockquote class='inline_help'>
+        <p>space separated list of fans to adjust, see HELP Section to test</p>
+    </blockquote>
+
+pwm hdd:
+: <input type="text" name="hdd_pwm_hdd" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_pwm_hdd;?>" placeholder="sdb sdc" >
+    <blockquote class='inline_help'>
+        <p>space separated list of hdd/s to monitor temps</p>
+    </blockquote>
+
+pwm controller:
+: <input type="text" name="hdd_pwm_controller" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_pwm_controller;?>" placeholder="nct6775.672" >
+    <blockquote class='inline_help'>
+        <p>enter the Controller Description, see HELP Section</p>
+    </blockquote>
+
+pwm hwmon:
+: <input type="text" name="hdd_pwm_hwmon" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_pwm_hwmon;?>" placeholder="hwmon2" >
+    <blockquote class='inline_help'>
+        <p>enter the hwmon Description, see HELP Section</p>
+    </blockquote>
+
+start temp:
+: <input type="text" name="hdd_start_temp" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_start_temp;?>" placeholder="25" >
+    <blockquote class='inline_help'>
+        <p>enter the Start Temp for lowest rpm value</p>
+    </blockquote>
+
+max temp:
+: <input type="text" name="hdd_max_temp" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_max_temp;?>" placeholder="50" >
+    <blockquote class='inline_help'>
+        <p>enter the max Temp for highest rpm value</p>
+    </blockquote>
+
+target temp:
+: <input type="text" name="hdd_target_temp" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_target_temp;?>" placeholder="22" >
+    <blockquote class='inline_help'>
+        <p>enter the targetting Temp to avoid hysterie, must be lower then Start Temp</p>
+    </blockquote>
+
+min rpm:
+: <input type="text" name="hdd_min_rpm" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_min_rpm;?>" placeholder="30" >
+    <blockquote class='inline_help'>
+        <p>enter the min rpm value 0 - 255, must be lower then max rpm</p>
+    </blockquote>
+
+max rpm:
+: <input type="text" name="hdd_max_rpm" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_max_rpm;?>" placeholder="150" >
+    <blockquote class='inline_help'>
+        <p>enter the max rpm value 0 - 255, must be higher then min rpm</p>
+    </blockquote>
+
+cron timer:
+: <input type="text" name="hdd_cron_time" class="narrow" maxlength="31" value="<?=$pwmfansetup_hdd_cron_time;?>" placeholder="3 * * * *" >
+    <blockquote class='inline_help'>
+        <p>set the lookup cron value here, * * * * * as sample for every minute</p>
+    </blockquote>
+
+
+<div style="text-align: center;">
+    <input type="button" value="Apply" onClick="send('apply')">
+    <input type="button" value="Set Cron" onClick="send('hdd_start')">
+	<input type="button" value="<?php echo $pwmfansetup['hdd_cron_state']; ?>"/>
+</div>
+
+
+<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>CPU FAN Setup</span></div>
+
+pwm fan:
+: <input type="text" name="pwm_fan" class="narrow" maxlength="20" value="<?=$pwmfansetup_pwm_fan;?>" placeholder="pwm2" >
+    <blockquote class='inline_help'>
+        <p>Fan to adjust (single only), see HELP Section to test</p>
+    </blockquote>
+
+pwm controller:
+: <input type="text" name="pwm_controller" class="narrow" maxlength="20" value="<?=$pwmfansetup_pwm_controller;?>" placeholder="nct6775.672" >
+    <blockquote class='inline_help'>
+        <p>enter the Controller Description, see HELP Section</p>
+    </blockquote>
+
+pwm hwmon:
+: <input type="text" name="pwm_hwmon" class="narrow" maxlength="20" value="<?=$pwmfansetup_pwm_hwmon;?>" placeholder="hwmon2" >
+    <blockquote class='inline_help'>
+        <p>enter the hwmon Description, see HELP Section</p>
+    </blockquote>
+
+start temp:
+: <input type="text" name="start_temp" class="narrow" maxlength="20" value="<?=$pwmfansetup_start_temp;?>" placeholder="65" >
+    <blockquote class='inline_help'>
+        <p>enter the Start Temp for lowest rpm value</p>
+    </blockquote>
+
+max temp:
+: <input type="text" name="max_temp" class="narrow" maxlength="20" value="<?=$pwmfansetup_max_temp;?>" placeholder="90" >
+    <blockquote class='inline_help'>
+        <p>enter the max Temp for highest rpm value</p>
+    </blockquote>
+
+target temp:
+: <input type="text" name="target_temp" class="narrow" maxlength="20" value="<?=$pwmfansetup_target_temp;?>" placeholder="55" >
+    <blockquote class='inline_help'>
+        <p>enter the targetting Temp to avoid hysterie, must be lower then Start Temp</p>
+    </blockquote>
+
+min rpm:
+: <input type="text" name="min_rpm" class="narrow" maxlength="20" value="<?=$pwmfansetup_min_rpm;?>" placeholder="30" >
+    <blockquote class='inline_help'>
+        <p>enter the min rpm value 0 - 255, must be lower then max rpm</p>
+    </blockquote>
+
+max rpm:
+: <input type="text" name="max_rpm" class="narrow" maxlength="20" value="<?=$pwmfansetup_max_rpm;?>" placeholder="150" >
+    <blockquote class='inline_help'>
+        <p>enter the max rpm value 0 - 255, must be higher then min rpm</p>
+    </blockquote>
+
+cron timer:
+: <input type="text" name="cron_time" class="narrow" maxlength="20" value="<?=$pwmfansetup_cron_time;?>" placeholder="2 * * * *" >
+    <blockquote class='inline_help'>
+        <p>set the lookup cron value here, * * * * * as sample for every minute</p>
+    </blockquote>
+
+
+<div style="text-align: center;">
+    <input type="button" value="Apply" onClick="send('apply')">
+    <input type="button" value="Set Cron" onClick="send('cpu_start')">
+	<input type="button" value="<?php echo $pwmfansetup['cron_state']; ?>"/>
+</div>
+
+</form>

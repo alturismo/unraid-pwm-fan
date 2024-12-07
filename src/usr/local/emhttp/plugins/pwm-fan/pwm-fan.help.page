@@ -1,0 +1,18 @@
+Menu="pwm-fan:1"
+Title="PWM INFO & HELP"
+Tag="icon-archive"
+---
+
+<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>PWM FAN INFO, available Devices</span></div>
+
+<?php
+echo nl2br(file_get_contents( "/boot/config/plugins/pwm-fan/fanssettings" )); // get the contents, and echo it out.
+?>
+
+<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>PWM FAN INFO, Test Devices</span></div>
+
+<?php
+echo nl2br(file_get_contents( "/boot/config/plugins/pwm-fan/fanssettings_help" )); // get the contents, and echo it out.
+?>
+
+</form>
