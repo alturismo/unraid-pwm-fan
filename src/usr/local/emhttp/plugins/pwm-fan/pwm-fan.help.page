@@ -1,6 +1,6 @@
 Menu="pwm-fan:1"
 Title="PWM INFO & HELP"
-Tag="icon-archive"
+Tag="icon-fan"
 ---
 
 <div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>PWM FAN INFO, available Devices</span></div>

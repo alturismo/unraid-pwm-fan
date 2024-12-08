@@ -4,12 +4,16 @@ source /boot/config/plugins/pwm-fan/pwmfansettings
 
 ############### End config
 
+if [ "$syslog" == "yes" ]; then
+
 log_message() {
   while IFS= read -r line; do
-    logger "pwmhdd-fan: ${line}"
+    logger "pwm-hdd-fan: ${line}"
   done
 }
 exec > >(log_message) 2>&1
+
+fi
 
 # find /sys/devices/platform/ -type f -name "*pwm*_enable" -print 2>/dev/null
 

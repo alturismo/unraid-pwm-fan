@@ -27,6 +27,8 @@ $pwmfansetup_target_temp        = isset($pwmfansetup['target_temp']) ? $pwmfanse
 $pwmfansetup_min_rpm        = isset($pwmfansetup['min_rpm']) ? $pwmfansetup['min_rpm'] : "";
 $pwmfansetup_max_rpm        = isset($pwmfansetup['max_rpm']) ? $pwmfansetup['max_rpm'] : "";
 $pwmfansetup_cron_time        = isset($pwmfansetup['cron_time']) ? $pwmfansetup['cron_time'] : "";
+// Log
+$pwmfansetup_syslog        = isset($pwmfansetup['syslog']) ? $pwmfansetup['syslog'] : "";
 ?>
 
 <script>
@@ -176,6 +178,19 @@ cron timer:
     <input type="button" value="Apply" onClick="send('apply')">
     <input type="button" value="Set Cron" onClick="send('cpu_start')">
     <input type="button" value="<?php echo $pwmfansetup['cron_state']; ?>"/>
+</div>
+
+
+<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>Log Setup</span></div>
+
+syslog:
+: <input type="text" name="syslog" class="narrow" maxlength="20" value="<?=$pwmfansetup_syslog;?>" placeholder="yes" >
+    <blockquote class='inline_help'>
+        <p>type <yes> to activate syslog logging</p>
+    </blockquote>
+
+<div style="text-align: center;">
+    <input type="button" value="Apply" onClick="send('apply')">
 </div>
 
 </form>
