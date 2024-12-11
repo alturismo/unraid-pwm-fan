@@ -3,16 +3,21 @@ Title="PWM INFO & HELP"
 Tag="icon-fan"
 ---
 
+<?
+$file = "/boot/config/plugins/pwm-fan/fanssettings";
+$text = @file_get_contents($file) ?: '';
+$text = preg_replace(["/\r\n/","/\r/"],"\n",$text);
+$file2 = "/boot/config/plugins/pwm-fan/fanssettings_help";
+$text2 = @file_get_contents($file2) ?: '';
+$text2 = preg_replace(["/\r\n/","/\r/"],"\n",$text2);
+?>
+
 <div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>PWM FAN INFO, available Devices</span></div>
 
-<?php
-echo nl2br(file_get_contents( "/boot/config/plugins/pwm-fan/fanssettings" )); // get the contents, and echo it out.
-?>
+<textarea spellcheck="false" cols="120" rows="<?=substr_count($text,"\n")+1?>" maxlength="4096" name="text" style="resize:none;font-family:bitstream;width:90%" <?if ($var['fsState']=="Started"):?>disabled<?endif;?>><?=htmlspecialchars($text)?></textarea>
 
 <div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>PWM FAN INFO, Test Devices</span></div>
 
-<?php
-echo nl2br(file_get_contents( "/boot/config/plugins/pwm-fan/fanssettings_help" )); // get the contents, and echo it out.
-?>
+<textarea spellcheck="false" cols="120" rows="<?=substr_count($text2,"\n")+1?>" maxlength="4096" name="text" style="resize:none;font-family:bitstream;width:90%" <?if ($var['fsState']=="Started"):?>disabled<?endif;?>><?=htmlspecialchars($text2)?></textarea>
 
 </form>
