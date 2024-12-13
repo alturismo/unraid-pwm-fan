@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ls -l /sys/devices/platform/*/*/*/*pwm*_enable | cut -f10 -d' ' > /boot/config/plugins/pwm-fan/fanssettings
+ls -l /sys/devices/platform/*/*/*/*pwm*_enable | grep -o '[^ ]*$' > /boot/config/plugins/pwm-fan/fanssettings
 
 pwm_control=$(tail -1 /boot/config/plugins/pwm-fan/fanssettings |  cut -f5 -d'/')
 pwm_hwmonitor=$(tail -1 /boot/config/plugins/pwm-fan/fanssettings |  cut -f7 -d'/')
