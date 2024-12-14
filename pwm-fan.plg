@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "pwm-fan">
 <!ENTITY author    "alturismo">
-<!ENTITY version   "2024.12.08">
+<!ENTITY version   "2024.12.14">
 <!ENTITY launch    "Settings/pwm-fan">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/alturismo/unraid-pwm-fan/master">
 <!ENTITY pluginURL "&gitURL;/&name;.plg">
@@ -20,6 +20,10 @@
         support="https://forums.unraid.net/topic/181843-support-alturismo-repos/">
  
 <CHANGES>
+ ###2024.12.14
+  - cosmetics
+  - added log page
+
  ###2024.12.07
   - beta run
  ###2024.12.03

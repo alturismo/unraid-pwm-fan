@@ -1,0 +1,16 @@
+Menu="pwm-fan:2"
+Title="PWM FAN LOG"
+Tag="icon-fan"
+---
+
+<?
+$file = "/usr/local/emhttp/plugins/pwm-fan/pwm_log.txt";
+$text = @file_get_contents($file) ?: '';
+$text = preg_replace(["/\r\n/","/\r/"],"\n",$text);
+?>
+
+<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>ASPM Logs</span></div>
+<div style='border: 1px solid red; height:500px; overflow:auto;'>
+<textarea spellcheck="false" cols="120" rows="<?=substr_count($text,"\n")+1?>" maxlength="4096" name="text" style="resize:none;font-family:bitstream;width:90%" <?if ($var['fsState']=="Started"):?>disabled<?endif;?>><?=htmlspecialchars($text)?></textarea></div>
+
+</form>

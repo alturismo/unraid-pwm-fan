@@ -12,12 +12,10 @@ $text2 = @file_get_contents($file2) ?: '';
 $text2 = preg_replace(["/\r\n/","/\r/"],"\n",$text2);
 ?>
 
-<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>PWM FAN INFO, available Devices</span></div>
-
+<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>ASPM CURRENT State</span></div>
 <textarea spellcheck="false" cols="120" rows="<?=substr_count($text,"\n")+1?>" maxlength="4096" name="text" style="resize:none;font-family:bitstream;width:90%" <?if ($var['fsState']=="Started"):?>disabled<?endif;?>><?=htmlspecialchars($text)?></textarea>
 
-<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>PWM FAN INFO, Test Devices</span></div>
-
+<div class="title"><span class="left"><i class="fa fa-hand-peace-o title"></i>ASPM INFO, alternative enabling devices</span></div>
 <textarea spellcheck="false" cols="120" rows="<?=substr_count($text2,"\n")+1?>" maxlength="4096" name="text" style="resize:none;font-family:bitstream;width:90%" <?if ($var['fsState']=="Started"):?>disabled<?endif;?>><?=htmlspecialchars($text2)?></textarea>
 
 </form>

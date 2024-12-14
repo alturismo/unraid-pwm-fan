@@ -2,6 +2,7 @@ Menu="Utilities"
 Type="xmenu"
 Title="PWM-FANS"
 Icon="pwm_fan.png"
+Tag="icon-fan"
 Tabs="true"
 ---
 <?php
@@ -29,6 +30,7 @@ $pwmfansetup_max_rpm        = isset($pwmfansetup['max_rpm']) ? $pwmfansetup['max
 $pwmfansetup_cron_time        = isset($pwmfansetup['cron_time']) ? $pwmfansetup['cron_time'] : "";
 // Log
 $pwmfansetup_syslog        = isset($pwmfansetup['syslog']) ? $pwmfansetup['syslog'] : "";
+shell_exec("/usr/local/emhttp/plugins/pwm-fan/scripts/pwm_logs.sh");
 ?>
 
 <script>
