@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "pwm-fan">
 <!ENTITY author    "alturismo">
-<!ENTITY version   "2024.12.14">
+<!ENTITY version   "2024.12.18">
 <!ENTITY launch    "Settings/pwm-fan">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/alturismo/unraid-pwm-fan/master">
 <!ENTITY pluginURL "&gitURL;/&name;.plg">
@@ -20,6 +20,9 @@
         support="https://forums.unraid.net/topic/181843-support-alturismo-repos/">
  
 <CHANGES>
+###2024.12.18
+- fixed log fetching (less spam)
+
  ###2024.12.14
   - cosmetics
   - added log page
@@ -96,6 +99,8 @@ fi
     echo "cron for CPU not started"
 	sed -i 's/^cron_state=.*/cron_state="stopped"/' /boot/config/plugins/pwm-fan/pwmfansettings
   fi
+
+  touch /usr/local/emhttp/plugins/pwm-fan/pwm_log.txt
 
  </INLINE>
 </FILE>
