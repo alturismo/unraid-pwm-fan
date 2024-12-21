@@ -17,6 +17,7 @@ $pwmfansetup_max_temp        = isset($pwmfansetup['max_temp']) ? $pwmfansetup['m
 $pwmfansetup_target_temp        = isset($pwmfansetup['target_temp']) ? $pwmfansetup['target_temp'] : "";
 $pwmfansetup_min_rpm        = isset($pwmfansetup['min_rpm']) ? $pwmfansetup['min_rpm'] : "";
 $pwmfansetup_max_rpm        = isset($pwmfansetup['max_rpm']) ? $pwmfansetup['max_rpm'] : "";
+$pwmfansetup_cron_seconds        = isset($pwmfansetup['cron_seconds']) ? $pwmfansetup['cron_seconds'] : "";
 $pwmfansetup_cron_time        = isset($pwmfansetup['cron_time']) ? $pwmfansetup['cron_time'] : "";
 // HDD Setting
 $pwmfansetup_hdd_pwm_fan        = isset($pwmfansetup['hdd_pwm_fan']) ? $pwmfansetup['hdd_pwm_fan'] : "";
@@ -105,6 +106,13 @@ max rpm:
 : <input type="text" name="max_rpm" class="narrow" maxlength="20" value="<?=$pwmfansetup_max_rpm;?>" placeholder="150" >
     <blockquote class='inline_help'>
         <p>enter the max rpm value 0 - 255, must be higher then min rpm</p>
+    </blockquote>
+
+cron seconds:
+: <input type="text" name="cron_seconds" class="narrow" maxlength="20" value="<?=$pwmfansetup_cron_seconds;?>" placeholder="5" >
+    <blockquote class='inline_help'>
+        <p>more aggressiv CPU Fan lookup speed, will run then every setted second between crons, cron timer * * * * * recommended</p>
+		<p>NO logging here as massive spam ...leave empty if not wanted and regular cron is enough</p>
     </blockquote>
 
 cron timer:

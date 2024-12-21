@@ -2,8 +2,12 @@
 
 source /boot/config/plugins/pwm-fan/pwmfansettings
 
-############### End config
+### aggresiv mode disabling syslog
+if [[ ! -z $cron_seconds ]]; then
+	syslog=""
+fi
 
+############### End config
 if [ "$syslog" == "yes" ]; then
 
 log_message() {
@@ -15,7 +19,8 @@ exec > >(log_message) 2>&1
 
 fi
 
-# find /sys/devices/platform/ -type f -name "*pwm*_enable" -print 2>/dev/null
+### General
+pwmechoinfo=""
 
 ### Control file for hysterie target <> start temp
 fan_on="/usr/local/emhttp/plugins/pwm-fan/"$pwm_fan"_fan_on"
@@ -32,7 +37,7 @@ if (( "$current_temp" < "$target_temp" )); then
 	echo $pwm_set > /sys/devices/platform/"$pwm_controller"/hwmon/$pwm_hwmon/$pwm_fan
 	if [[ -f "$fan_on" ]]; then
 		rm "$fan_on"
-		echo "set fan off"
+		pwmechoinfo="set fan off"
 	fi
 fi
 
@@ -40,14 +45,14 @@ if [[ -f "$fan_on" ]] && (( "$current_temp" >= "$target_temp" )) && (("$current_
 	pwm_set=$min_rpm
 	echo $pwm_set > /sys/devices/platform/"$pwm_controller"/hwmon/$pwm_hwmon/$pwm_fan
 	touch $fan_on
-	echo "fan is on and set fan to min $min_rpm until target is reached"
+	pwmechoinfo="fan is on and set fan to min $min_rpm until target is reached"
 fi
 
 if (( "$current_temp" >= "$max_temp" )); then
 	pwm_set=$max_rpm
 	echo $pwm_set > /sys/devices/platform/"$pwm_controller"/hwmon/$pwm_hwmon/$pwm_fan
 	touch $fan_on
-	echo "set fan to max $max_rpm"
+	pwmechoinfo="set fan to max $max_rpm"
 fi
 
 if (( "$current_temp" >= "$start_temp" )) && (( "$current_temp" < "$max_temp" )); then
@@ -58,9 +63,19 @@ if (( "$current_temp" >= "$start_temp" )) && (( "$current_temp" < "$max_temp" ))
 	temp_offset=$(echo $temp_offset $offset_multi | awk '{print $1 * $2}')
 	pwm_set=$(echo $min_rpm $temp_offset | awk '{print $1 + $2}')
 	pwm_set=$(echo $pwm_set | awk '{print int($1 + 0.5) }')
-	echo "set fan to value $pwm_set"
 	echo $pwm_set > /sys/devices/platform/"$pwm_controller"/hwmon/$pwm_hwmon/$pwm_fan
 	touch $fan_on
+	pwmechoinfo="set fan to value $pwm_set"
+fi
+
+if [[ ! -z $pwmechoinfo ]]; then
+	echo $pwmechoinfo
+fi
+
+### if aggressiv rerun every N seconds
+if [[ ! -z $cron_seconds ]]; then
+	sleep $cron_seconds
+	/usr/local/emhttp/plugins/pwm-fan/scripts/pwm-fan-aggressiv.sh
 fi
 
 exit;
