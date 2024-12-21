@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "pwm-fan">
 <!ENTITY author    "alturismo">
-<!ENTITY version   "2024.12.18">
+<!ENTITY version   "2024.12.21">
 <!ENTITY launch    "Settings/pwm-fan">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/alturismo/unraid-pwm-fan/master">
 <!ENTITY pluginURL "&gitURL;/&name;.plg">
@@ -20,8 +20,11 @@
         support="https://forums.unraid.net/topic/181843-support-alturismo-repos/">
  
 <CHANGES>
-###2024.12.18
-- fixed log fetching (less spam)
+ ###2024.12.21
+ - added extra HDD Section for split setup (following main temp fan rules)
+
+ ###2024.12.18
+ - fixed log fetching (less spam)
 
  ###2024.12.14
   - cosmetics
@@ -75,13 +78,16 @@ fi
   touch /boot/config/plugins/pwm-fan/pwmfansettings
   sed -i 's/^cron_state=.*//' /boot/config/plugins/pwm-fan/pwmfansettings
   sed -i 's/^hdd_cron_state=.*//' /boot/config/plugins/pwm-fan/pwmfansettings
+  sed -i 's/^hdd_extra_cron_state=.*//' /boot/config/plugins/pwm-fan/pwmfansettings
   sed -i '/^$/d' /boot/config/plugins/pwm-fan/pwmfansettings
 
   echo 'cron_state=""' >> /boot/config/plugins/pwm-fan/pwmfansettings
   echo 'hdd_cron_state=""' >> /boot/config/plugins/pwm-fan/pwmfansettings
+  echo 'hdd_extra_cron_state=""' >> /boot/config/plugins/pwm-fan/pwmfansettings
 
   /usr/local/emhttp/plugins/pwm-fan/scripts/cpu_cron.sh
   /usr/local/emhttp/plugins/pwm-fan/scripts/hdd_cron.sh
+  /usr/local/emhttp/plugins/pwm-fan/scripts/hdd_extra_cron.sh
 
   if [ ! -z "$(crontab -l | grep -i pwm_hdd.sh)" ]; then
     echo "cronjob for HDD pwm started"
@@ -89,7 +95,14 @@ fi
   else
     echo "cron for HDD not started"
 	sed -i 's/^hdd_cron_state=.*/hdd_cron_state="stopped"/' /boot/config/plugins/pwm-fan/pwmfansettings
+  fi
 
+  if [ ! -z "$(crontab -l | grep -i pwm_hdd_extra.sh)" ]; then
+    echo "cronjob for HDD extra pwm started"
+	sed -i 's/^hdd_extra_cron_state=.*/hdd_extra_cron_state="started"/' /boot/config/plugins/pwm-fan/pwmfansettings
+  else
+    echo "cron for HDD not started"
+	sed -i 's/^hdd_extra_cron_state=.*/hdd_extra_cron_state="stopped"/' /boot/config/plugins/pwm-fan/pwmfansettings
   fi
 
   if [ ! -z "$(crontab -l | grep -i pwm-fan.sh)" ]; then
@@ -111,8 +124,15 @@ fi
   removepkg &plgPATH;/*.txz
   rm -rf &plgPATH;
   rm -rf &emhttp;
+  crontab -l | grep -v "HDD "  | crontab -
+  crontab -l | grep -v "pwm_hdd.sh"  | crontab -
+  crontab -l | grep -v "HDDextra"  | crontab -
+  crontab -l | grep -v "pwm_hdd_extra.sh"  | crontab -
+  crontab -l | grep -v "CPU"  | crontab -
+  crontab -l | grep -v "pwm-fan.sh"  | crontab -
   sed -i 's/^cron_state=.*//' /boot/config/plugins/pwm-fan/pwmfansettings
   sed -i 's/^hdd_cron_state=.*//' /boot/config/plugins/pwm-fan/pwmfansettings
+  sed -i 's/^hdd_extra_cron_state=.*//' /boot/config/plugins/pwm-fan/pwmfansettings
   sed -i '/^$/d' /boot/config/plugins/pwm-fan/pwmfansettings
   echo "&name; has been removed"
  </INLINE>
