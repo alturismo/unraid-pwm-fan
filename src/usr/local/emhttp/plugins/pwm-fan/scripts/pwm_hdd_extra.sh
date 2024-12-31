@@ -23,8 +23,16 @@ hdd_array=()
 
 for pwm_disk_extra in $hdd_extra_pwm_hdd
 	do
-	_temp=$(smartctl --nocheck standby -iA /dev/$pwm_disk_extra | egrep ^194 | awk '{print $4}' | sed 's/^0*//')
-	[ -z $_temp ] && _temp="0"
+	_temp=$(smartctl --nocheck standby -iA /dev/$pwm_disk_extra | egrep ^194 | awk '{print $4,$10}' | sed 's/^0*//')
+	if [ ! -z "$_temp" ]; then
+		if [[ "${_temp[0]%% *}" -le "${_temp[0]##* }" ]]; then
+			_temp=${_temp[0]%% *}
+		else
+			_temp=${_temp[0]##* }
+		fi
+	else
+		_temp="0"
+	fi
 	hdd_array+=($_temp)
 	#echo $(printf '%s\n' "${hdd_array[@]}")
 	done
