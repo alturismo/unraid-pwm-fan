@@ -10,6 +10,7 @@
 <!ENTITY plgNAME   "&name;-&version;-x86_64">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 <!ENTITY packages  "/boot/config/plugins/&name;/packages">
+<!ENTITY sha256 "7e2230ede576a30ce57a1271514d12b987681b5df56c3e62af5deb727656ba86">
 ]>
 <PLUGIN name="&name;" 
         author="&author;" 
@@ -54,6 +55,7 @@
 
 <FILE Name="&plgPATH;/&plgNAME;.txz" Run="upgradepkg --install-new">
 <URL>&gitURL;/packages/&name;.txz</URL>
+<SHA256>&sha256;</SHA256>
 </FILE>
 
 <FILE Run="/bin/bash">
